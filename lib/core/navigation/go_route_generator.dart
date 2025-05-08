@@ -25,7 +25,7 @@ class GoRouterGenerator {
           GoRoute(
             name: DashboardScreen.route,
             path: DashboardScreen.route,
-            builder: (context, state) => MySubscriptionScreen(),
+            builder: (context, state) => DashboardScreen(),
           ),
           GoRoute(
             path: MySubscriptionScreen.route,
