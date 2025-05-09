@@ -19,6 +19,8 @@ class Subscription with _$Subscription {
     required double price,
     required String period,
     required String imagePath,
+    required int textColor,
+    required int bgColor,
   }) = _Subscription;
 
   factory Subscription.fromJson(Map<String, dynamic> json) =>

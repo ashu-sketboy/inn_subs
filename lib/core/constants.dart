@@ -1,0 +1,8 @@
+const List<int> cardColors = [
+  0xFFFFBF00,
+  0xFFFFC0CB,
+  0xFF00FFFF,
+  0xFF36013F,
+  0xFFFFA500,
+  0xFF673AB7,
+];

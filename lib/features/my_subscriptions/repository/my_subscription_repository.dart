@@ -10,6 +10,8 @@ class MySubscriptionRepository {
         price: 100,
         period: "month",
         imagePath: "assets/images/ai.png",
+        textColor: 0xFF000000,
+        bgColor: 0xFFFFBF00,
       ),
       Subscription(
         id: 1,
@@ -17,6 +19,8 @@ class MySubscriptionRepository {
         price: 4.99,
         period: "month",
         imagePath: "assets/images/dribbble.png",
+        textColor: 0xFFFFFFFF,
+        bgColor: 0xFFFFC0CB,
       ),
       Subscription(
         id: 2,
@@ -24,6 +28,8 @@ class MySubscriptionRepository {
         price: 9.99,
         period: "month",
         imagePath: "assets/images/figma.png",
+        textColor: 0xFFFFFFFF,
+        bgColor: 0xFF00FFFF,
       ),
       Subscription(
         id: 3,
@@ -31,6 +37,8 @@ class MySubscriptionRepository {
         price: 9.99,
         period: "month",
         imagePath: "assets/images/linkedin.png",
+        textColor: 0xFFFFFFFF,
+        bgColor: 0xFF36013F,
       ),
       Subscription(
         id: 4,
@@ -38,6 +46,8 @@ class MySubscriptionRepository {
         price: 1.99,
         period: "month",
         imagePath: "assets/images/medium.png",
+        textColor: 0xFFFFFFFF,
+        bgColor: 0xFFFFA500,
       ),
       Subscription(
         id: 5,
@@ -45,6 +55,8 @@ class MySubscriptionRepository {
         price: 9.99,
         period: "month",
         imagePath: "assets/images/netflix.png",
+        textColor: 0xFFFFFFFF,
+        bgColor: 0xFF673AB7,
       ),
       Subscription(
         id: 6,
@@ -52,6 +64,8 @@ class MySubscriptionRepository {
         price: 3.99,
         period: "month",
         imagePath: "assets/images/prime.png",
+        textColor: 0xFF000000,
+        bgColor: 0xFFFFBF00,
       ),
       Subscription(
         id: 7,
@@ -59,6 +73,8 @@ class MySubscriptionRepository {
         price: 30.99,
         period: "month",
         imagePath: "assets/images/ps.png",
+        textColor: 0xFFFFFFFF,
+        bgColor: 0xFFFFC0CB,
       ),
       Subscription(
         id: 8,
@@ -66,6 +82,8 @@ class MySubscriptionRepository {
         price: 5.99,
         period: "month",
         imagePath: "assets/images/spotify.png",
+        textColor: 0xFFFFFFFF,
+        bgColor: 0xFF00FFFF,
       ),
       Subscription(
         id: 9,
@@ -73,6 +91,8 @@ class MySubscriptionRepository {
         price: 29.99,
         period: "month",
         imagePath: "assets/images/youtube.png",
+        textColor: 0xFFFFFFFF,
+        bgColor: 0xFF36013F,
       ),
     ];
   }

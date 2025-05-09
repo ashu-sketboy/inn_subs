@@ -8,14 +8,5 @@ class MySubsState with _$MySubsState {
     @Default(ScreenStatus.initial()) ScreenStatus status,
     @Default([]) List<SubscriptionCategory> subscriptionCategory,
     @Default([]) List<Subscription> subscription,
-    @Default([
-      0xFFFFBF00,
-      0xFFFFC0CB,
-      0xFF00FFFF,
-      0xFF36013F,
-      0xFFFFA500,
-      0xFF673AB7,
-    ])
-    List<int> color,
   }) = _MySubsState;
 }
