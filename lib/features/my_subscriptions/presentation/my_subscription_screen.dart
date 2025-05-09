@@ -28,61 +28,63 @@ class _MySubscriptionScreenState extends State<MySubscriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MySubsBloc, MySubsState>(
-      builder: (context, state) {
-        if (state.status is LoadingState) {
-          return Center(child: CircularProgressIndicator());
-        }
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: BlocBuilder<MySubsBloc, MySubsState>(
+        builder: (context, state) {
+          if (state.status is LoadingState) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-        return Column(
-          spacing: 12,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Row(
-                children: [
-                  ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
+          return Column(
+            spacing: 12,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    Chip(
+                      label: Text(
+                        "All Subs",
+                        style: TextStyle(color: Colors.white),
+                      ),
+
+                      backgroundColor:
+                          state.currentSelectedCategory == 0
+                              ? Colors.blue
+                              : null,
+                    ),
+                    for (SubscriptionCategory category
+                        in state.subscriptionCategory) ...{
                       Chip(
                         label: Text(
-                          "All Subs",
+                          category.name,
                           style: TextStyle(color: Colors.white),
                         ),
-                        backgroundColor:
-                            state.currentSelectedCategory == 0
-                                ? Colors.blue
-                                : null,
                       ),
-                      for (SubscriptionCategory category
-                          in state.subscriptionCategory) ...{
-                        Chip(
-                          label: Text(
-                            category.name,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      },
-                      IconButton(onPressed: () {}, icon: Icon(Icons.add)),
-                    ],
-                  ),
-                ],
+                    },
+                    IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: state.subscription.length,
-                itemBuilder: (context, index) {
-                  return SubscriptionCard(
-                    subscription: state.subscription[index],
-                    index: index,
-                  );
-                },
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.only(top: 20, bottom: 30),
+                  itemCount: state.subscription.length,
+                  itemBuilder: (context, index) {
+                    return SubscriptionCard(
+                      subscription: state.subscription[index],
+                      index: index,
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -99,37 +101,45 @@ class SubscriptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: -20),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Color(subscription.bgColor),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15),
-          topRight: Radius.circular(15),
+    return Align(
+      heightFactor: .8,
+      child: Container(
+        height: 150,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Color(subscription.bgColor),
+          boxShadow: [
+            BoxShadow(color: Colors.black, spreadRadius: 2, blurRadius: 6),
+          ],
+          borderRadius: BorderRadius.circular(30),
         ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                Text(
-                  subscription.name,
-                  style: TextStyle(color: Color(subscription.textColor)),
-                ),
-                SizedBox(height: 10),
-                Chip(
-                  label: Text(
-                    "\$${subscription.price} / ${subscription.period}",
-                    style: TextStyle(color: Colors.white),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    subscription.name,
+                    style: TextStyle(
+                      color: Color(subscription.textColor),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 10),
+                  Chip(
+                    label: Text(
+                      "\$${subscription.price} / ${subscription.period}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          CircularIcon(iconPath: subscription.imagePath, size: 80),
-        ],
+            CircularIcon(iconPath: subscription.imagePath, size: 60),
+          ],
+        ),
       ),
     );
   }
