@@ -72,10 +72,25 @@ class _MySubscriptionScreenState extends State<MySubscriptionScreen> {
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.only(top: 20, bottom: 30),
-                  itemCount: state.subscription.length,
+                  itemCount: state.subscription.length + 1,
                   itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return SubscriptionCard(
+                        subscription: Subscription(
+                          id: -1,
+                          name: 'Add Subscription',
+                          price: 0,
+                          period: '',
+                          imagePath: '',
+                          textColor: 0xFFFFFFFF,
+                          bgColor: 0xFF0000FF,
+                        ),
+                        index: index,
+                      );
+                    }
+
                     return SubscriptionCard(
-                      subscription: state.subscription[index],
+                      subscription: state.subscription[index - 1],
                       index: index,
                     );
                   },
@@ -127,17 +142,25 @@ class SubscriptionCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Chip(
-                    label: Text(
-                      "\$${subscription.price} / ${subscription.period}",
-                      style: TextStyle(color: Colors.white),
+                  if (subscription.id != -1) ...{
+                    SizedBox(height: 10),
+                    Chip(
+                      label: Text(
+                        "\$${subscription.price} / ${subscription.period}",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
-                  ),
+                  },
                 ],
               ),
             ),
-            CircularIcon(iconPath: subscription.imagePath, size: 60),
+            if (subscription.id == -1)
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.add_circle_outline_sharp),
+              )
+            else
+              CircularIcon(iconPath: subscription.imagePath, size: 60),
           ],
         ),
       ),
