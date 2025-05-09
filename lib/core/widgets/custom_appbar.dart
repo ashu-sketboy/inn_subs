@@ -15,10 +15,10 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
             alignment: Alignment.center,
             child: CustomSlidingSegmentedControl<int>(
               controller: controller,
-              initialValue: 1,
+              initialValue: 0,
               children: {
-                1: CustomTab(value: 1, controller: controller, text: "General"),
-                2: CustomTab(value: 2, controller: controller, text: "My Sabs"),
+                0: CustomTab(value: 0, controller: controller, text: "General"),
+                1: CustomTab(value: 1, controller: controller, text: "My Sabs"),
               },
               decoration: BoxDecoration(
                 color: Color(0xff242526),
@@ -31,7 +31,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
               duration: Duration(milliseconds: 100),
               curve: Curves.easeInToLinear,
               onValueChanged: (v) {
-                print(v);
+                // print(v);
               },
             ),
           ),
@@ -62,9 +62,10 @@ class CustomTab extends StatefulWidget {
 
 class _CustomTabState extends State<CustomTab> {
   bool selected = false;
+
   @override
   void initState() {
-    selected = widget.value == (widget.controller.value ?? 1);
+    selected = widget.value == (widget.controller.value ?? 0);
     widget.controller.addListener(() {
       setState(() {
         selected = widget.value == widget.controller.value;

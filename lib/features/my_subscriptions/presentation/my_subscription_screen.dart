@@ -6,6 +6,18 @@ class MySubscriptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: Row(
+            children: [
+              Expanded(child: ListView.builder(itemBuilder: (context, i) {})),
+              IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
