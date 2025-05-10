@@ -20,8 +20,8 @@ class _MySubscriptionScreenState extends State<MySubscriptionScreen> {
   void initState() {
     MySubsBloc bloc = BlocProvider.of<MySubsBloc>(context);
     MySubsState state = bloc.state;
-    if (state.subscriptionCategory.isEmpty || state.subscription.isEmpty) {
-      bloc.add(MySubsEvent.loadData());
+    if (state.subscriptionCategory.isEmpty || state.mySubscriptions.isEmpty) {
+      bloc.add(MySubsEvent.loadMyData());
     }
     super.initState();
   }
@@ -72,7 +72,7 @@ class _MySubscriptionScreenState extends State<MySubscriptionScreen> {
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.only(top: 20, bottom: 30),
-                  itemCount: state.subscription.length + 1,
+                  itemCount: state.mySubscriptions.length + 1,
                   itemBuilder: (context, index) {
                     if (index == 0) {
                       return SubscriptionCard(
@@ -90,7 +90,7 @@ class _MySubscriptionScreenState extends State<MySubscriptionScreen> {
                     }
 
                     return SubscriptionCard(
-                      subscription: state.subscription[index - 1],
+                      subscription: state.mySubscriptions[index - 1],
                       index: index,
                     );
                   },

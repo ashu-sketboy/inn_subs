@@ -54,6 +54,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
             const SizedBox(height: 32),
             Text(
               "Manage all your subscriptions",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 26,

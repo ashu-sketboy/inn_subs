@@ -12,19 +12,62 @@ part 'my_subs_state.dart';
 
 class MySubsBloc extends Bloc<MySubsEvent, MySubsState> {
   MySubsBloc() : super(MySubsState(repo: MySubscriptionRepository())) {
-    on<_LoadSubs>((event, emit) {
+    on<_AddRemoveSubs>((event, emit) {
+      List<int> selectedSubs = [];
+      bool existed = false;
+
+      for (int i = 0; i < state.selectedSubsIndex.length; i++) {
+        if (state.selectedSubsIndex[i] == event.idx) {
+          existed = true;
+        } else {
+          selectedSubs.add(state.selectedSubsIndex[i]);
+        }
+      }
+
+      if (!existed) {
+        selectedSubs.add(event.idx);
+      }
+
+      emit(
+        state.copyWith(
+          status: ScreenStatus.initial(),
+          selectedSubsIndex: selectedSubs,
+        ),
+      );
+    });
+    on<_LoadAllSubscription>((event, emit) {
+      try {
+        emit(
+          state.copyWith(status: ScreenStatus.loading(), selectedSubsIndex: []),
+        );
+
+        List<Subscription> subsResponse = state.repo.getAllSubscriptions();
+
+        emit(
+          state.copyWith(
+            status: ScreenStatus.success("All subs loaded"),
+            allSubscriptions: subsResponse,
+          ),
+        );
+      } catch (e) {
+        emit(
+          state.copyWith(status: ScreenStatus.error("Something went wrong")),
+        );
+      }
+    });
+    on<_LoadMyData>((event, emit) {
       try {
         emit(state.copyWith(status: ScreenStatus.loading()));
 
         List<SubscriptionCategory> categoryResponse =
             state.repo.getAllCategories();
-        List<Subscription> subsResponse = state.repo.getAllSubscriptions();
+        List<Subscription> subsResponse = state.repo.getMySubscriptions();
 
         emit(
           state.copyWith(
             status: ScreenStatus.success("D"),
             subscriptionCategory: categoryResponse,
-            subscription: subsResponse,
+            mySubscriptions: subsResponse,
           ),
         );
       } catch (e) {
@@ -54,6 +97,15 @@ class MySubsBloc extends Bloc<MySubsEvent, MySubsState> {
           name: event.categoryName,
         );
 
+        if (state.selectedSubsIndex.isEmpty) {
+          emit(
+            state.copyWith(
+              status: ScreenStatus.error("Select some subs for category."),
+            ),
+          );
+          return;
+        }
+
         for (SubscriptionCategory category in state.subscriptionCategory) {
           if (category.name == newCategory.name) {
             emit(
@@ -67,9 +119,12 @@ class MySubsBloc extends Bloc<MySubsEvent, MySubsState> {
           }
         }
 
-        List<Subscription> subs = state.subscription;
-        for (int idx in event.selectedSubsIndex) {
-          subs[idx] = subs[idx].copyWith(parentId: newCategory.id);
+        List<Subscription> mySubs = state.mySubscriptions;
+
+        for (int idx in state.selectedSubsIndex) {
+          final Subscription subscription = state.allSubscriptions[idx]
+              .copyWith(parentId: newCategory.id);
+          mySubs.add(subscription);
         }
 
         emit(
@@ -77,7 +132,7 @@ class MySubsBloc extends Bloc<MySubsEvent, MySubsState> {
             status: ScreenStatus.initial(),
             currentSelectedCategory: newCategory.id,
             subscriptionCategory: [...state.subscriptionCategory, newCategory],
-            subscription: [...state.subscription],
+            mySubscriptions: [...mySubs],
           ),
         );
       } catch (e) {

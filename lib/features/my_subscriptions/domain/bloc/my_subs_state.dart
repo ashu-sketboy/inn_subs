@@ -7,6 +7,8 @@ class MySubsState with _$MySubsState {
     @Default(0) int currentSelectedCategory,
     @Default(ScreenStatus.initial()) ScreenStatus status,
     @Default([]) List<SubscriptionCategory> subscriptionCategory,
-    @Default([]) List<Subscription> subscription,
+    @Default([]) List<Subscription> allSubscriptions,
+    @Default([]) List<Subscription> mySubscriptions,
+    @Default([]) List<int> selectedSubsIndex,
   }) = _MySubsState;
 }
