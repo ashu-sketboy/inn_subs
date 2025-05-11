@@ -8,12 +8,8 @@ class MySubscriptionRepository {
     _data = SubscriptionData();
   }
 
-  List<Subscription> getAllSubscriptions() {
-    return _data.getAllSubs();
-  }
-
   List<Subscription> getMySubscriptions() {
-    return _data.getAllSubs();
+    return _data.getMySubs();
   }
 
   List<SubscriptionCategory> getAllCategories() {

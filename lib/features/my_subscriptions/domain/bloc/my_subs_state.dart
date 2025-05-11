@@ -4,11 +4,10 @@ part of 'my_subs_bloc.dart';
 class MySubsState with _$MySubsState {
   const factory MySubsState({
     required MySubscriptionRepository repo,
+    ListenableStatus? listenStatus,
     @Default(0) int currentSelectedCategory,
     @Default(ScreenStatus.initial()) ScreenStatus status,
     @Default([]) List<SubscriptionCategory> subscriptionCategory,
-    @Default([]) List<Subscription> allSubscriptions,
     @Default([]) List<Subscription> mySubscriptions,
-    @Default([]) List<int> selectedSubsIndex,
   }) = _MySubsState;
 }

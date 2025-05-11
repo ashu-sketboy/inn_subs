@@ -24,14 +24,15 @@ class SubsSelectionTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircularIcon(iconPath: subscription.imagePath, size: 60),
           Expanded(
             child: Text(
               subscription.name,
               style: TextStyle(
-                color: Color(subscription.textColor),
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),

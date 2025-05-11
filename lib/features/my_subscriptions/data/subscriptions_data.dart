@@ -1,14 +1,9 @@
-import 'package:inn_subs/core/constants.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/model/subscription/subscription.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/model/subscriptionCategory/subscription_category.dart';
 
 class SubscriptionData {
-  List<Subscription> getAllSubs() {
-    return kAllSubs;
-  }
-
   List<Subscription> getMySubs() {
-    return kAllSubs;
+    return [];
   }
 
   List<SubscriptionCategory> getSubsCategory() {

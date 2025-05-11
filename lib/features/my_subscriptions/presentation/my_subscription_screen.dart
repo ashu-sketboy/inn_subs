@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inn_subs/core/helper/screen_status.dart';
-import 'package:inn_subs/core/widgets/circular_icon.dart';
+import 'package:inn_subs/features/create_category/presentation/add_category_screen.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/bloc/my_subs_bloc.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/model/subscription/subscription.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/model/subscriptionCategory/subscription_category.dart';
+import 'package:inn_subs/features/my_subscriptions/presentation/widget/subscription_card.dart';
 
 class MySubscriptionScreen extends StatefulWidget {
   const MySubscriptionScreen({super.key});
@@ -23,6 +24,7 @@ class _MySubscriptionScreenState extends State<MySubscriptionScreen> {
     if (state.subscriptionCategory.isEmpty || state.mySubscriptions.isEmpty) {
       bloc.add(MySubsEvent.loadMyData());
     }
+
     super.initState();
   }
 
@@ -45,27 +47,73 @@ class _MySubscriptionScreenState extends State<MySubscriptionScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    Chip(
-                      label: Text(
-                        "All Subs",
-                        style: TextStyle(color: Colors.white),
-                      ),
-
-                      backgroundColor:
-                          state.currentSelectedCategory == 0
-                              ? Colors.blue
-                              : null,
-                    ),
-                    for (SubscriptionCategory category
-                        in state.subscriptionCategory) ...{
-                      Chip(
+                    GestureDetector(
+                      onTap: () {
+                        BlocProvider.of<MySubsBloc>(
+                          context,
+                        ).add(MySubsEvent.selectCurrentCategory(categoryId: 0));
+                      },
+                      child: Chip(
+                        backgroundColor:
+                            state.currentSelectedCategory == 0
+                                ? Colors.blue
+                                : null,
                         label: Text(
-                          category.name,
+                          "All Subs",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
+                    ),
+                    SizedBox(width: 8),
+                    for (SubscriptionCategory category
+                        in state.subscriptionCategory) ...{
+                      GestureDetector(
+                        onTap: () {
+                          BlocProvider.of<MySubsBloc>(context).add(
+                            MySubsEvent.selectCurrentCategory(
+                              categoryId: category.id,
+                            ),
+                          );
+                        },
+                        child: Chip(
+                          backgroundColor:
+                              category.id == state.currentSelectedCategory
+                                  ? Colors.blue
+                                  : null,
+                          label: Text(
+                            category.name,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
                     },
-                    IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                    IconButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20.0),
+                            ),
+                          ),
+                          builder: (context) {
+                            return AddCategoryScreen(
+                              category: state.subscriptionCategory,
+                              mySubscriptions: state.mySubscriptions,
+                            );
+                          },
+                        ).then((newCategoryCreated) {
+                          if (newCategoryCreated == true && context.mounted) {
+                            BlocProvider.of<MySubsBloc>(
+                              context,
+                            ).add(MySubsEvent.loadMyData());
+                          }
+                        });
+                      },
+                      icon: Icon(Icons.add),
+                    ),
                   ],
                 ),
               ),
@@ -89,80 +137,20 @@ class _MySubscriptionScreenState extends State<MySubscriptionScreen> {
                       );
                     }
 
-                    return SubscriptionCard(
-                      subscription: state.mySubscriptions[index - 1],
-                      index: index,
-                    );
+                    if (state.currentSelectedCategory == 0 ||
+                        state.currentSelectedCategory ==
+                            state.mySubscriptions[index - 1].parentId) {
+                      return SubscriptionCard(
+                        subscription: state.mySubscriptions[index - 1],
+                        index: index,
+                      );
+                    }
                   },
                 ),
               ),
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-class SubscriptionCard extends StatelessWidget {
-  const SubscriptionCard({
-    super.key,
-    required this.subscription,
-    required this.index,
-  });
-
-  final Subscription subscription;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      heightFactor: .8,
-      child: Container(
-        height: 150,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Color(subscription.bgColor),
-          boxShadow: [
-            BoxShadow(color: Colors.black, spreadRadius: 2, blurRadius: 6),
-          ],
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    subscription.name,
-                    style: TextStyle(
-                      color: Color(subscription.textColor),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  if (subscription.id != -1) ...{
-                    SizedBox(height: 10),
-                    Chip(
-                      label: Text(
-                        "\$${subscription.price} / ${subscription.period}",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  },
-                ],
-              ),
-            ),
-            if (subscription.id == -1)
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.add_circle_outline_sharp),
-              )
-            else
-              CircularIcon(iconPath: subscription.imagePath, size: 60),
-          ],
-        ),
       ),
     );
   }

@@ -19,6 +19,9 @@ class _App extends StatelessWidget {
     return MaterialApp.router(
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.black87,
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Color(0xff242526),
+        ),
         chipTheme: ChipThemeData(backgroundColor: Color(0xff242526)),
         iconTheme: IconThemeData(color: Color(0xFFB0B3B8)),
         iconButtonTheme: IconButtonThemeData(
