@@ -8,11 +8,11 @@ class MySubscriptionRepository {
     _data = SubscriptionData();
   }
 
-  List<Subscription> getMySubscriptions() {
+  Future<List<Subscription>> getMySubscriptions() async {
     return _data.getMySubs();
   }
 
-  List<SubscriptionCategory> getAllCategories() {
-    return [];
+  Future<List<SubscriptionCategory>> getAllCategories() async {
+    return _data.getSubsCategory();
   }
 }

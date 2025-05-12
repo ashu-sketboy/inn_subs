@@ -1,13 +1,13 @@
 import 'package:inn_subs/features/my_subscriptions/domain/model/subscription/subscription.dart';
 
-const List<int> cardColors = [
-  0xFFFFBF00,
-  0xFFFFC0CB,
-  0xFF00FFFF,
-  0xFF36013F,
-  0xFFFFA500,
-  0xFF673AB7,
-];
+const String kGeneralBox = "GENERAL_BOX";
+const String kSubscriptionBox = "SUBSCRIPTION_BOX";
+const String kSubscriptionCategoryBox = "SUBSCRIPTION_CATEGORY_BOX";
+
+const String kAllSubscription = "ALL_SUBS";
+const String kMySubscription = "MY_SUBS";
+const String kCategory = "CATEGORY";
+const String kIntroShown = "INTRO_SHOWN";
 
 const List<Subscription> kAllSubs = [
   Subscription(

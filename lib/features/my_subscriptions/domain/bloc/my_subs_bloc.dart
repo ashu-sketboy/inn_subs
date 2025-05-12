@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:inn_subs/core/helper/listenable_status.dart';
-import 'package:inn_subs/core/helper/screen_status.dart';
+import 'package:inn_subs/core/helper/status/listenable_status.dart';
+import 'package:inn_subs/core/helper/status/screen_status.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/model/subscription/subscription.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/model/subscriptionCategory/subscription_category.dart';
 import 'package:inn_subs/features/my_subscriptions/repository/my_subscription_repository.dart';

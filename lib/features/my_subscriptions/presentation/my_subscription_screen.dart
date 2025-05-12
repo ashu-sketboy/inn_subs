@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inn_subs/core/helper/screen_status.dart';
+import 'package:inn_subs/core/helper/status/screen_status.dart';
 import 'package:inn_subs/features/create_category/presentation/add_category_screen.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/bloc/my_subs_bloc.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/model/subscription/subscription.dart';

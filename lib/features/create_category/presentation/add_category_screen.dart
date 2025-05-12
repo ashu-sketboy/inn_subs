@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inn_subs/core/helper/screen_status.dart';
+import 'package:go_router/go_router.dart';
+import 'package:inn_subs/core/helper/status/screen_status.dart';
 import 'package:inn_subs/core/widgets/custom_text_field.dart';
 import 'package:inn_subs/features/create_category/domain/bloc/category_bloc.dart';
 import 'package:inn_subs/features/create_category/presentation/widget/subs_selection_tile.dart';
@@ -52,7 +53,25 @@ class _AddCategoryScreenState extends State<_AddCategoryScreen> {
     return Container(
       padding: const EdgeInsets.all(8.0),
       height: MediaQuery.sizeOf(context).height * .8,
-      child: BlocBuilder<CategoryBloc, CategoryState>(
+      child: BlocConsumer<CategoryBloc, CategoryState>(
+        listenWhen: (prev, curr) {
+          return prev.listenStatus != curr.listenStatus;
+        },
+        listener: (context, state) {
+          state.listenStatus?.when(
+            success: (title, message) {
+              if (title == kCreateCategorySuccess) {
+                context.pop(true);
+              }
+            },
+            error: (title, message) {
+              if (title == kCreateCategoryError) {
+                final snackBar = SnackBar(content: Text(message));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            },
+          );
+        },
         builder: (context, state) {
           if (state.status is LoadingState) {
             return Center(child: CircularProgressIndicator());
@@ -76,7 +95,10 @@ class _AddCategoryScreenState extends State<_AddCategoryScreen> {
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.left,
               ),
-              CustomTextField.outlineBorder(controller: bloc.controller),
+              CustomTextField.outlineBorder(
+                controller: bloc.controller,
+                borderRadius: 22,
+              ),
               Text(
                 "Select subscriptions",
                 style: TextStyle(

@@ -12,3 +12,6 @@ class CategoryState with _$CategoryState {
     @Default([]) List<int> selectedSubsIndex,
   }) = _CategoryState;
 }
+
+const kCreateCategoryError = 'CATEGORY_ERROR';
+const kCreateCategorySuccess = 'CATEGORY_SUCCESS';

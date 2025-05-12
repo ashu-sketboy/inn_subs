@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:inn_subs/core/helper/listenable_status.dart';
-import 'package:inn_subs/core/helper/screen_status.dart';
+import 'package:inn_subs/core/helper/status/listenable_status.dart';
+import 'package:inn_subs/core/helper/status/screen_status.dart';
 import 'package:inn_subs/features/create_category/repository/create_category_repository.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/model/subscription/subscription.dart';
 import 'package:inn_subs/features/my_subscriptions/domain/model/subscriptionCategory/subscription_category.dart';
@@ -27,7 +27,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<_LoadAllSubscription>((event, emit) {
       try {
         emit(
-          state.copyWith(status: ScreenStatus.loading(), selectedSubsIndex: []),
+          state.copyWith(
+            listenStatus: null,
+            status: ScreenStatus.loading(),
+            selectedSubsIndex: [],
+          ),
         );
 
         List<Subscription> subsResponse = state.repo.getAllSubscriptions();
@@ -50,6 +54,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     });
     on<_CreateNewCategory>((event, emit) {
       try {
+        emit(state.copyWith(listenStatus: null));
+
         SubscriptionCategory newCategory = SubscriptionCategory(
           id: DateTime.now().microsecondsSinceEpoch,
           name: controller.text,
@@ -58,7 +64,10 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         if (state.selectedSubsIndex.isEmpty) {
           emit(
             state.copyWith(
-              status: ScreenStatus.error("Select some subs for category."),
+              listenStatus: ListenError(
+                kCreateCategoryError,
+                "Select some subs for category.",
+              ),
             ),
           );
           return;
@@ -68,7 +77,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
           if (category.name == newCategory.name) {
             emit(
               state.copyWith(
-                status: ScreenStatus.error(
+                listenStatus: ListenError(
+                  kCreateCategoryError,
                   "Category already exists, try with different name.",
                 ),
               ),
@@ -76,29 +86,37 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
             return;
           }
         }
-
-        List<Subscription> mySubs = state.mySubscriptions;
+        List<Subscription> newSubs = [];
 
         for (int idx in state.selectedSubsIndex) {
           final Subscription subscription = state.allSubscriptions[idx]
               .copyWith(parentId: newCategory.id);
-          mySubs.add(subscription);
+          newSubs.add(subscription);
         }
+
+        state.repo.createCategory(category: newCategory, subscription: newSubs);
 
         emit(
           state.copyWith(
-            status: ScreenStatus.success("New Category created"),
-            category: [...state.category, newCategory],
-            mySubscriptions: [...mySubs],
+            listenStatus: ListenSuccess(
+              kCreateCategorySuccess,
+              "Category created",
+            ),
           ),
         );
       } catch (e) {
         emit(
-          state.copyWith(status: ScreenStatus.error("Something went wrong")),
+          state.copyWith(
+            listenStatus: ListenError(
+              kCreateCategoryError,
+              "Something went wrong",
+            ),
+          ),
         );
       }
     });
     on<_AddRemoveSubs>((event, emit) {
+      emit(state.copyWith(listenStatus: null));
       List<int> selectedSubs = [];
       bool existed = false;
 
@@ -116,6 +134,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
       emit(
         state.copyWith(
+          listenStatus: null,
           status: ScreenStatus.initial(),
           selectedSubsIndex: selectedSubs,
         ),
